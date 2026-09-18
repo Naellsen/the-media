@@ -16,11 +16,11 @@ const MediaCard = ({item}) => {
                 src={validSrc}
                 alt={title || `Media Poster`}
                 fill
-                size="(max-width: 768px) 50vw, 20vw"
+                size="(max-width: 768px) 50vw, 20vw, (max-width: 1200px), 50vw, 33vw"
                 className="object-cover transition-transform duration-300 hover:scale-105 "
                 />
                 {displayScore && (
-                <span className="badge absolute top-0 right-0 bg-black/80 text-amber-400 text-[10px] font-semibold px-1.5 py-0.5 rounded backdrop-blur-sm">
+                <span className="badge absolute top-2 right-2 bg-gray- text-amber-400 text-[10px] font-semibold px-1.5 py-0.5 rounded backdrop-blur-sm">
                 {displayScore}
                 </span>
             )}

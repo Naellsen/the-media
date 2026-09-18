@@ -14,7 +14,6 @@ query GetTopMedia($page: Int = 1, $perPage: Int = 10, $sort: [MediaSort] = [SCOR
         large 
       }
       meanScore
-      averageScore
       episodes
       format
       description
