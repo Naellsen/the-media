@@ -17,12 +17,20 @@ export async function fetchAniList(query, variables = {}) {
     return null;
   }
 }
-const TMDB_BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
-const API_KEY= process.env.TMDB_API_KEY;
+const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+const API_KEY = process.env.TMDB_API_KEY;
 
-export async function fetchTMDB_API(endpoint, query) {
-    const url = `${TMDB_BASE_URL}/${endpoint}/${query}?api_key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
+export async function fetchTMDB_API(endpoint, query = "") {
+    const queryString = query ? `&query=${encodeURIComponent(query)}` : "";
+    const url = `${TMDB_BASE_URL}/${endpoint}?api_key=${API_KEY}${queryString}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch TMDB data:", error);
+        return null;
+    }
 }
