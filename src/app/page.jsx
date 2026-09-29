@@ -1,24 +1,20 @@
 import { fetchAniList, fetchTMDB_API } from "@/utils/api";
 import { TOP_MEDIA_QUERY } from "@/query/query";
-import { formatAniListAnime, formatAniListManga, formatMovieListTmdb, formatTvListTmdb } from "@/utils/formaters";
-import MediaCard from "@/components";
-
+import { formatAniListItem, formatTMDBItem } from "@/utils/formaters";
+import MediaCard from "@/components/MediaCard";
 
 const Page = async () => {
     const popularData = await fetchAniList(TOP_MEDIA_QUERY, {
     perPage: 10,
     });
-    const topAnime = (popularData?.anime?.media || []).map(formatAniListAnime);
-    const topManga = (popularData?.manga?.media || []).map(formatAniListManga);
+    const topAnime = (popularData?.anime?.media || []).map(formatAniListItem);
+    const topManga = (popularData?.manga?.media || []).map(formatAniListItem);
 
     const movieData = await fetchTMDB_API("movie/popular");
-    const popularMovies = movieData?.results ? movieData.results.slice(0,10).map(formatMovieListTmdb).filter(Boolean): [];
+    const popularMovies = movieData?.results ? movieData.results.slice(0,10).map(formatTMDBItem).filter(Boolean): [];
 
     const tvData = await fetchTMDB_API("tv/popular");
-    const popularTV = tvData?.results ? tvData.results.slice(0,10).map(formatTvListTmdb).filter(Boolean): [];
-
-    
-
+    const popularTV = tvData?.results ? tvData.results.slice(0,10).map(formatTMDBItem).filter(Boolean): [];
 
     return(
         <div>

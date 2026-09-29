@@ -1,70 +1,57 @@
-const PLACEHOLDER_IMAGE =
-    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='750' viewBox='0 0 500 750'><rect width='100%' height='100%' fill='%231f2937'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-family='sans-serif' font-size='24'>No Cover</text></svg>";
+const PLACEHOLDER_IMAGE = "/placeholder.jpg"; // Replace with your placeholder path
 
-const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
-
-// Utility to clean HTML tags returned by AniList
+// Helper to sanitize HTML tags or long text from summaries
 const cleanDescription = (text) => {
     if (!text) return "";
-    return text.replace(/<[^>]*>?/gm, "").trim();
+    return text.replace(/<[^>]*>?/gm, "").slice(0, 150) + "...";
 };
 
-export const formatAniListManga = (item) => {
+// --- ANILIST FORMATTER ---
+export const formatAniListItem = (item) => {
     if (!item) return null;
+
+    const type = item.type?.toLowerCase() || (item.episodes !== undefined ? 'anime' : 'manga');
+    const isAnime = type === 'anime';
     const cover = item.coverImage?.extraLarge || item.coverImage?.large;
+    const statusText = isAnime
+        ? (item.episodes ? `${item.episodes} Ep.` : 'Airing')
+        : (item.chapters ? `${item.chapters} Ch.` : 'Publishing');
 
     return {
-        id: `manga-${item.id}`,
-        title: item.title?.english || item.title?.romaji || "Untitled",
+        id: `anilist-${type}-${item.id}`,
+        title: item.title?.english || item.title?.romaji || item.title?.native || "Untitled",
         image: cover && cover.trim() !== "" ? cover : PLACEHOLDER_IMAGE,
         score: item.meanScore ? (item.meanScore / 10).toFixed(1) : null,
-        subtitle: `Manga • ${item.chapters ? `${item.chapters} Ch.` : "Publishing"}`,
+        subtitle: `${isAnime ? 'Anime' : 'Manga'} • ${statusText}`,
         description: cleanDescription(item.description),
+        type: type,
+        url: `/${type}/${item.id}`
     };
 };
 
-export const formatAniListAnime = (item) => {
-    if (!item) return null;
-    const cover = item.coverImage?.extraLarge || item.coverImage?.large;
-
-    return {
-        id: `anime-${item.id}`,
-        title: item.title?.english || item.title?.romaji || "Untitled",
-        image: cover && cover.trim() !== "" ? cover : PLACEHOLDER_IMAGE,
-        score: item.meanScore ? (item.meanScore / 10).toFixed(1) : null,
-        subtitle: `Anime • ${item.episodes ? `${item.episodes} Ep.` : "Airing"}`,
-        description: cleanDescription(item.description),
-    };
-};
-
-export const formatMovieListTmdb = (item) => {
+// --- TMDB FORMATTER ---
+export const formatTMDBItem = (item) => {
     if (!item) return null;
 
-    const cover = item.poster_path ? `${TMDB_IMAGE_BASE}${item.poster_path}` : null;
-    const year = item.release_date ? item.release_date.split("-")[0] : "Movie";
+    const mediaType = item.media_type; // 'movie', 'tv', or 'person'
+    if (mediaType === 'person') return null; // Optionally ignore actor results
+
+    const title = item.title || item.name || "Untitled";
+    const releaseYear = (item.release_date || item.first_air_date || '').split('-')[0];
+    const poster = item.poster_path || item.profile_path
+        ? `https://image.tmdb.org/t/p/w500${item.poster_path}${item.profile_path}` 
+        : PLACEHOLDER_IMAGE;
+
+    const mediaLabel = mediaType === 'tv' ? 'TV Series' : 'Movie';
 
     return {
-        id: `movie-${item.id}`,
-        title: item.title || item.original_title || "Untitled",
-        image: cover && cover.trim() !== "" ? cover : PLACEHOLDER_IMAGE,
+        id: `tmdb-${mediaType}-${item.id}`,
+        title: title,
+        image: poster,
         score: item.vote_average ? item.vote_average.toFixed(1) : null,
-        subtitle: `Movie • ${year}`,
-        description: item.overview || "",
-    };
-};
-
-export const formatTvListTmdb = (item) => {
-    if (!item) return null;
-
-    const cover = item.poster_path ? `${TMDB_IMAGE_BASE}${item.poster_path}` : null;
-    const year = item.first_air_date ? item.first_air_date.split("-")[0] : "Tv";
-
-    return {
-        id: `tv-${item.id}`,
-        title: item.name || item.original_name || "Untitled",
-        image: cover && cover.trim() !== "" ? cover : PLACEHOLDER_IMAGE,
-        score: item.vote_average ? item.vote_average.toFixed(1) : null,
-        subtitle: `TV Series • ${year}`,
-        description: item.overview || "",
+        subtitle: `${mediaLabel} ${releaseYear ? `• ${releaseYear}` : ''}`,
+        description: cleanDescription(item.overview),
+        type: mediaType,
+        url: `/${mediaType}/${item.id}`
     };
 };

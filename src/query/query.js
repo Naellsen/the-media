@@ -39,3 +39,28 @@ query GetTopMedia($page: Int = 1, $perPage: Int = 10, $sort: [MediaSort] = [SCOR
   }
 }
 `;
+
+export const SEARCH_ANILIST_QUERY = `
+  query ($search: String) {
+    Page(page: 1, perPage: 20) {
+      media(search: $search) {
+        id
+        title {
+          romaji
+          english
+          native
+        }
+        type
+        format
+        coverImage {
+          large
+        }
+        startDate {
+          year
+        }
+        meanScore
+        description
+      }
+    }
+  }
+`;

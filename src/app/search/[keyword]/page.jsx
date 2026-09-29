@@ -1,0 +1,59 @@
+import MediaCard from "@/components/MediaCard"
+import { SEARCH_ANILIST_QUERY } from "@/query/query"
+import { fetchAniList, fetchTMDB_API} from "@/utils/api"
+import { formatAniListItem, formatTMDBItem } from "@/utils/formaters"
+
+const Page = async ({ params }) => {
+    const { keyword } = await params
+    const decodedKeyword = decodeURIComponent(keyword)
+
+    // Fetch both APIs in parallel
+    const [aniListData, tmdbData] = await Promise.all([
+        fetchAniList(SEARCH_ANILIST_QUERY, { search: decodedKeyword }).catch(() => null),
+        fetchTMDB_API("/search/multi", decodedKeyword).catch(() => null)
+    ]);
+
+    // Format AniList Results
+    const rawAniList = aniListData?.Page?.media || aniListData?.data?.Page?.media || [];
+    const aniListResults = rawAniList.map(formatAniListItem);
+
+    // Format TMDB Results
+    const rawTMDB = tmdbData?.results || [];
+    const tmdbResults = rawTMDB.map(formatTMDBItem);
+
+    return (
+        <div className="container mx-auto p-4 space-y-10">
+            <h1 className="text-3xl font-bold">Search results for "{decodedKeyword}"</h1>
+
+            {/* Section 1: AniList (Anime & Manga) */}
+            <section>
+                <h2 className="text-xl font-semibold mb-4">Anime / Manga Results</h2>
+                {aniListResults.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        {aniListResults.map((item) => (
+                            <MediaCard key={item.id} item={item} />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No Anime / Manga found.</p>
+                )}
+            </section>
+
+            {/* Section 2: TMDB (Movies & TV Shows) */}
+            <section>
+                <h2 className="text-xl font-semibold mb-4">Movies & TV Shows</h2>
+                {tmdbResults.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        {tmdbResults.map((item) => (
+                            <MediaCard key={item} item={item} />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No TMDB results found.</p>
+                )}
+            </section>
+        </div>
+    );
+};
+
+export default Page;
