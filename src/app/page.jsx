@@ -17,9 +17,9 @@ const Page = async () => {
     const popularTV = tvData?.results ? tvData.results.slice(0,10).map(formatTMDBItem).filter(Boolean): [];
 
     return(
-        <div>
+        <div className="bg-black">
             <section>
-                <h1>Popular Movies</h1>
+                <h1 className="text-xl font-bold py-5 text-white">Popular Movies</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                     {popularMovies.map((movie) => (
                         <MediaCard key={movie.id} item={movie}/>
@@ -27,7 +27,7 @@ const Page = async () => {
                 </div>
             </section>
             <section>
-                <h1>Popular Tv</h1>
+                <h1 className="text-xl font-bold py-5 text-white">Popular Tv</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                     {popularTV.map((tv) => (
                     <MediaCard key={tv.id} item={tv}/>
@@ -35,7 +35,7 @@ const Page = async () => {
                 </div>
             </section>
             <section>
-                <h1>Top Anime</h1>
+                <h1 className="text-xl font-bold py-5 text-white">Top Anime</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                     {topAnime.map((anime) => (
                         <MediaCard key={anime.id} item={anime} />
@@ -43,7 +43,7 @@ const Page = async () => {
                 </div>
             </section>
             <section>
-                <h1>Top Manga</h1>
+                <h1 className="text-xl font-bold py-5 text-white">Top Manga</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                     {topManga.map((manga) => (
                         <MediaCard key={manga.id} item={manga}/>

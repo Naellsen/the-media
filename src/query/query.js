@@ -64,3 +64,106 @@ export const SEARCH_ANILIST_QUERY = `
     }
   }
 `;
+
+export const ANILIST_DETAIL_QUERY = `
+  query ($id: Int, $type: MediaType) {
+    Media(id: $id, type: $type) {
+      id
+      idMal
+      title {
+        romaji
+        english
+        native
+      }
+      type
+      format
+      status
+      description(asHtml: false)
+      startDate {
+        year
+        month
+        day
+      }
+      endDate {
+        year
+        month
+        day
+      }
+      season
+      seasonYear
+      episodes
+      duration
+      chapters
+      volumes
+      countryOfOrigin
+      source
+      hashtag
+      coverImage {
+        extraLarge
+        large
+        color
+      }
+      bannerImage
+      genres
+      synonyms
+      averageScore
+      meanScore
+      popularity
+      favourites
+      trending
+      studios {
+        nodes {
+          id
+          name
+          isAnimationStudio
+        }
+      }
+      relations {
+        edges {
+          relationType
+          node {
+            id
+            title {
+              userPreferred
+            }
+            format
+            type
+            status
+            coverImage {
+              medium
+            }
+          }
+        }
+      }
+      characters(sort: ROLE, perPage: 6) {
+        edges {
+          role
+          node {
+            id
+            name {
+              full
+            }
+            image {
+              medium
+            }
+          }
+        }
+      }
+      recommendations(perPage: 6) {
+        nodes {
+          mediaRecommendation {
+            id
+            title {
+              userPreferred
+            }
+            type
+            format
+            coverImage {
+              medium
+            }
+          }
+        }
+      }
+    }
+  }
+`;

@@ -25,16 +25,17 @@ export const formatAniListItem = (item) => {
         subtitle: `${isAnime ? 'Anime' : 'Manga'} • ${statusText}`,
         description: cleanDescription(item.description),
         type: type,
-        url: `/${type}/${item.id}`
+        url: `/${type}/${item.id}`,
+        detailUrl: `/details/anilist/${item.id}`,
     };
 };
 
 // --- TMDB FORMATTER ---
 export const formatTMDBItem = (item) => {
     if (!item) return null;
-
-    const mediaType = item.media_type; // 'movie', 'tv', or 'person'
+    const mediaType = item.media_type || "movie" || "tv";
     if (mediaType === 'person') return null; // Optionally ignore actor results
+
 
     const title = item.title || item.name || "Untitled";
     const releaseYear = (item.release_date || item.first_air_date || '').split('-')[0];
@@ -43,7 +44,7 @@ export const formatTMDBItem = (item) => {
         : PLACEHOLDER_IMAGE;
 
     const mediaLabel = mediaType === 'tv' ? 'TV Series' : 'Movie';
-
+    
     return {
         id: `tmdb-${mediaType}-${item.id}`,
         title: title,
@@ -52,6 +53,7 @@ export const formatTMDBItem = (item) => {
         subtitle: `${mediaLabel} ${releaseYear ? `• ${releaseYear}` : ''}`,
         description: cleanDescription(item.overview),
         type: mediaType,
-        url: `/${mediaType}/${item.id}`
+        url: `/${mediaType}/${item.id}`,
+        detailUrl: `/media/tmdb-${mediaType}/${item.id}`,
     };
 };

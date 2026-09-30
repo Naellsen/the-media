@@ -25,7 +25,19 @@ const Page = async ({ params }) => {
         <div className="container mx-auto p-4 space-y-10">
             <h1 className="text-3xl font-bold">Search results for "{decodedKeyword}"</h1>
 
-            {/* Section 1: AniList (Anime & Manga) */}
+            <section>
+                <h2 className="text-xl font-semibold mb-4">Movies & TV Shows</h2>
+                {tmdbResults.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        {tmdbResults.filter(Boolean).map((item) => (
+                            <MediaCard key={item.id} item={item} />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No TMDB results found.</p>
+                )}
+            </section>
+            
             <section>
                 <h2 className="text-xl font-semibold mb-4">Anime / Manga Results</h2>
                 {aniListResults.length > 0 ? (
@@ -36,20 +48,6 @@ const Page = async ({ params }) => {
                     </div>
                 ) : (
                     <p className="text-gray-500">No Anime / Manga found.</p>
-                )}
-            </section>
-
-            {/* Section 2: TMDB (Movies & TV Shows) */}
-            <section>
-                <h2 className="text-xl font-semibold mb-4">Movies & TV Shows</h2>
-                {tmdbResults.length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {tmdbResults.map((item) => (
-                            <MediaCard key={item} item={item} />
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-gray-500">No TMDB results found.</p>
                 )}
             </section>
         </div>
