@@ -78,6 +78,7 @@ export const ANILIST_DETAIL_QUERY = `
       type
       format
       status
+      isAdult
       description(asHtml: false)
       startDate {
         year
@@ -91,10 +92,20 @@ export const ANILIST_DETAIL_QUERY = `
       }
       season
       seasonYear
+      
+      # Anime Specific
       episodes
       duration
+      trailer {
+        id
+        site
+        thumbnail
+      }
+
+      # Manga Specific
       chapters
       volumes
+
       countryOfOrigin
       source
       hashtag
@@ -111,13 +122,16 @@ export const ANILIST_DETAIL_QUERY = `
       popularity
       favourites
       trending
-      studios {
+      
+      # Filter primary animation studio
+      studios(isMain: true) {
         nodes {
           id
           name
           isAnimationStudio
         }
       }
+
       relations {
         edges {
           relationType
@@ -135,6 +149,7 @@ export const ANILIST_DETAIL_QUERY = `
           }
         }
       }
+
       characters(sort: ROLE, perPage: 6) {
         edges {
           role
@@ -149,6 +164,7 @@ export const ANILIST_DETAIL_QUERY = `
           }
         }
       }
+
       recommendations(perPage: 6) {
         nodes {
           mediaRecommendation {

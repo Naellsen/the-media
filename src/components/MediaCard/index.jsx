@@ -10,9 +10,10 @@ const MediaCard = ({ item }) => {
 
   const validSrc = image && image.trim() !== "" ? image : PLACEHOLDER_IMAGE;
   const displayScore = badge || (score ? `★ ${score}` : null);
+  const href = item.detailUrl || item.url || "#";
 
   return (
-    <Link href={item.detailUrl}>
+    <Link href={href}>
       <div className="group relative flex flex-col justify-between h-full rounded-lg bg-slate-900 border border-slate-800 overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
         {/* Poster Image Container */}
         <div className="relative h-80 w-full overflow-hidden bg-slate-950">
