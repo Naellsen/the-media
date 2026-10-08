@@ -3,25 +3,12 @@ import { ANILIST_DETAIL_QUERY } from "@/query/query";
 import Image from "next/image";
 import Link from "next/link";
 
-export async function generateMetadata({ params }) {
-    const { id } = await params;
-    const response = await fetchAniList(ANILIST_DETAIL_QUERY, { id: Number(id) }).catch(() => null);
-    const media = response?.Media || response?.data?.Media;
-
-    const title = media?.title?.english || media?.title?.romaji || "Manga Details";
-    return {
-        title: `${title} | The Media`,
-    };
-}
-
 const Page = async({ params }) => {
     const { id } = await params;
 
-    // 1. Fetch single anime details using numeric ID
     const response = await fetchAniList(ANILIST_DETAIL_QUERY, { id: Number(id) }).catch(() => null);
     const media = response?.Media || response?.data?.Media;
 
-    // 2. Handle 404 / Missing Data safely
     if (!media) {
         return (
             <div className="container mx-auto p-8 text-center text-red-500">
@@ -31,7 +18,6 @@ const Page = async({ params }) => {
         );
     }
 
-    // 3. Extract metadata
     const title = media.title?.english || media.title?.romaji || media.title?.native || "Untitled";
     const nativeTitle = media.title?.native;
     const imageUrl = media.coverImage?.extraLarge || media.coverImage?.large || "/placeholder.png";
@@ -48,14 +34,13 @@ const Page = async({ params }) => {
                         className="object-cover"
                         priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0f12] via-[#0d0f12]/40 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-[#0d0f12] via-[#0d0f12]/40 to-transparent" />
                 </div>
                 
             )}
 
             <div className="flex flex-col md:flex-row gap-8 items-start">
-                {/* Poster Image */}
-                <div className="relative w-full md:w-80 aspect-[2/3] bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 border border-gray-800">
+                <div className="relative w-full md:w-80 aspect-2/3 bg-gray-800 rounded-lg overflow-hidden shrink-0 border border-gray-800">
                     <Image
                         src={imageUrl}
                         alt={title}
@@ -65,9 +50,7 @@ const Page = async({ params }) => {
                     />
                 </div>
 
-                {/* Info Container */}
                 <div className="flex-1 space-y-4">
-                    {/* Badge & Rating */}
                     <div className="flex items-center gap-3">
                         <span className="px-3 py-1 bg-purple-600 text-white text-xs font-semibold rounded uppercase tracking-wider">
                             Anime
@@ -87,7 +70,6 @@ const Page = async({ params }) => {
                         )}
                     </div>
 
-                    {/* Meta Info (Episodes, Studio, Status, Season) */}
                     <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-300 border-y border-gray-800 py-3">
                         {media.episodes && (
                             <div>
@@ -115,7 +97,6 @@ const Page = async({ params }) => {
                         )}
                     </div>
 
-                    {/* Genres */}
                     <div className="flex flex-wrap gap-2">
                         {media.genres.map((genre) => (
                             <Link
@@ -128,7 +109,6 @@ const Page = async({ params }) => {
                         ))}
                     </div>
 
-                    {/* Synopsis */}
                     <div className="pt-2">
                         <h2 className="text-lg font-semibold text-white mb-2">Synopsis</h2>
                         <p className="text-gray-300 leading-relaxed whitespace-pre-line text-sm md:text-base">

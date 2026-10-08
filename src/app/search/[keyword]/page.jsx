@@ -7,26 +7,23 @@ const Page = async ({ params }) => {
     const { keyword } = await params
     const decodedKeyword = decodeURIComponent(keyword)
 
-    // Fetch both APIs in parallel
     const [aniListData, tmdbData] = await Promise.all([
         fetchAniList(SEARCH_ANILIST_QUERY, { search: decodedKeyword }).catch(() => null),
         fetchTMDB_API("/search/multi", decodedKeyword).catch(() => null)
     ]);
 
-    // Format AniList Results
     const rawAniList = aniListData?.Page?.media || aniListData?.data?.Page?.media || [];
     const aniListResults = rawAniList.map(formatAniListItem);
 
-    // Format TMDB Results
     const rawTMDB = tmdbData?.results || [];
     const tmdbResults = rawTMDB.map(formatTMDBItem);
 
     return (
         <div className="container mx-auto p-4 space-y-10">
-            <h1 className="text-3xl font-bold">Search results for "{decodedKeyword}"</h1>
+            <h1 className="text-3xl font-bold text-accent">Search results for "{decodedKeyword}"</h1>
 
             <section>
-                <h2 className="text-xl font-semibold mb-4">Movies & TV Shows</h2>
+                <h2 className="text-xl font-semibold mb-8 text-accent">Movies & TV Shows</h2>
                 {tmdbResults.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         {tmdbResults.filter(Boolean).map((item) => (
@@ -39,7 +36,7 @@ const Page = async ({ params }) => {
             </section>
             
             <section>
-                <h2 className="text-xl font-semibold mb-4">Anime / Manga Results</h2>
+                <h2 className="text-xl font-semibold mb-8 text-accent">Anime / Manga Results</h2>
                 {aniListResults.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         {aniListResults.map((item) => (

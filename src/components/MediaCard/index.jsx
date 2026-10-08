@@ -15,7 +15,6 @@ const MediaCard = ({ item }) => {
   return (
     <Link href={href}>
       <div className="group relative flex flex-col justify-between h-full rounded-lg bg-slate-900 border border-slate-800 overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-        {/* Poster Image Container */}
         <div className="relative h-80 w-full overflow-hidden bg-slate-950">
           <Image
             src={validSrc}
@@ -26,15 +25,13 @@ const MediaCard = ({ item }) => {
             unoptimized={validSrc.startsWith("data:")}
           />
 
-          {/* Score Badge */}
           {displayScore && (
             <span className="absolute top-2 right-2 z-10 bg-slate-950/80 backdrop-blur-md text-amber-400 text-xs font-bold px-2 py-1 rounded shadow">
               {displayScore}
             </span>
           )}
 
-          {/* Hover Gradient Overlay with Description */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end z-10">
+          <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end z-10">
             {description && (
               <p className="text-xs text-slate-300 line-clamp-6 leading-relaxed">
                 {description}
@@ -43,10 +40,9 @@ const MediaCard = ({ item }) => {
           </div>
         </div>
 
-        {/* Content Footer */}
-        <div className="p-3 flex flex-col flex-grow justify-between bg-slate-900 z-10">
+        <div className="p-3 flex flex-col grow justify-between bg-slate-900 z-10">
           <div>
-            <h3 className="font-semibold text-sm line-clamp-1 text-slate-100 group-hover:text-blue-400 transition-colors">
+            <h3 className="font-semibold text-sm line-clamp-1 text-slate-100 group-hover:text-secondary-50 transition-colors">
               {title || "Untitled"}
             </h3>
             {subtitle && (

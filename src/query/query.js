@@ -17,6 +17,7 @@ query GetTopMedia($page: Int = 1, $perPage: Int = 10, $sort: [MediaSort] = [SCOR
       episodes
       format
       description
+      trending
     }
   }
   manga: Page(page: $page, perPage: $perPage) {
@@ -35,6 +36,7 @@ query GetTopMedia($page: Int = 1, $perPage: Int = 10, $sort: [MediaSort] = [SCOR
       volumes
       format
       description
+      trending
     }
   }
 }
@@ -179,6 +181,30 @@ export const ANILIST_DETAIL_QUERY = `
             }
           }
         }
+      }
+    }
+  }
+`;
+
+export const SEARCH_BY_GENRE_QUERY = `
+  query ($genre: String, $type: MediaType) {
+    Page(page: 1, perPage: 20) {
+      media(genre: $genre, type: $type, sort: POPULARITY_DESC) {
+        id
+        title {
+          romaji
+          english
+        }
+        type
+        format
+        episodes
+        chapters
+        meanScore
+        coverImage {
+          extraLarge
+          large
+        }
+        description
       }
     }
   }
