@@ -3,7 +3,7 @@ import { fetchAniList } from "@/utils/api";
 import { ANILIST_DETAIL_QUERY } from "@/query/query";
 import Link from "next/link";
 
- const Page = async({ params }) => {
+const Page = async ({ params }) => {
     const { id } = await params;
 
     const response = await fetchAniList(ANILIST_DETAIL_QUERY, { id: Number(id) }).catch(() => null);
@@ -22,6 +22,8 @@ import Link from "next/link";
     const nativeTitle = media.title?.native;
     const imageUrl = media.coverImage?.extraLarge || media.coverImage?.large || "/placeholder.png";
     const studioName = media.studios?.nodes?.[0]?.name;
+    const characters = media?.characters?.edges || [];
+    const staffList = media?.staff?.edges || [];
 
     return (
         <div className="container mx-auto p-6 space-y-8 bg-black">
@@ -51,7 +53,7 @@ import Link from "next/link";
                     />
                 </div>
 
-                <div className="flex-1 space-y-4">
+                <div className="flex-1 space-y-6">
                     <div className="flex items-center gap-3">
                         <span className="px-3 py-1 bg-purple-600 text-white text-xs font-semibold rounded uppercase tracking-wider">
                             Anime
@@ -98,7 +100,7 @@ import Link from "next/link";
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                        {media.genres.map((genre) => (
+                        {media.genres?.map((genre) => (
                             <Link
                                 key={genre}
                                 href={`/genre/${encodeURIComponent(genre.toLowerCase())}`}
@@ -113,14 +115,101 @@ import Link from "next/link";
                         <h2 className="text-lg font-semibold text-white mb-2">Synopsis</h2>
                         <p className="text-gray-300 leading-relaxed whitespace-pre-line text-sm md:text-base">
                             {media.description
-                                ? media.description.replace(/<br\s*\/?>/gi, '\n')
+                                ? media.description.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>?/gm, '')
                                 : "No description available."}
                         </p>
                     </div>
+
+                    {characters.length > 0 && (
+                        <div className="pt-4 border-t border-gray-800">
+                             <h2 className="text-lg font-semibold text-white mb-4">Characters & Voice Actors</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {characters.map(({ node: character, role, voiceActors }) => {
+                                    const voiceActor = voiceActors?.[0]; // Get the Japanese VA
+
+                                    return (
+                                        <div 
+                                            key={character.id} 
+                                            className="flex items-center justify-between p-3 bg-gray-900 border border-gray-800 rounded-lg hover:border-gray-700 transition"
+                                        >
+                                            {/* Character (Left) */}
+                                            <div className="flex items-center gap-3">
+                                                <Image 
+                                                    src={character.image?.medium || '/placeholder.png'} 
+                                                    alt={character.name?.full || 'Character'} 
+                                                    width={44}
+                                                    height={44}
+                                                    className="w-11 h-11 object-cover rounded-md shrink-0 bg-gray-800"
+                                                />
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-white line-clamp-1">
+                                                        {character.name?.full || 'Unknown'}
+                                                    </h4>
+                                                    <span className="text-xs text-purple-400 capitalize">
+                                                        {role ? role.toLowerCase() : 'Supporting'}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Voice Actor (Right) */}
+                                            {voiceActor && (
+                                                <div className="flex items-center gap-3 text-right">
+                                                    <div>
+                                                        <h4 className="text-sm font-semibold text-white line-clamp-1">
+                                                            {voiceActor.name?.full || 'Unknown'}
+                                                        </h4>
+                                                        <span className="text-xs text-gray-400">
+                                                            {voiceActor.languageV2 || 'Japanese'}
+                                                        </span>
+                                                    </div>
+                                                    <Image 
+                                                        src={voiceActor.image?.medium || '/placeholder.png'} 
+                                                        alt={voiceActor.name?.full || 'Voice Actor'} 
+                                                        width={44}
+                                                        height={44}
+                                                        className="w-11 h-11 object-cover rounded-md shrink-0 bg-gray-800"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                    {staffList.length > 0 && (
+                                            <div className="pt-4 border-t border-gray-800">
+                                                <h2 className="text-lg font-semibold text-white mb-4">Staff</h2>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                                    {staffList.map(({ node: staff, role }) => (
+                                                        <div 
+                                                            key={staff.id} 
+                                                            className="flex items-center gap-3 p-3 bg-gray-900 border border-gray-800 rounded-lg"
+                                                        >
+                                                            <Image 
+                                                                src={staff.image?.medium || '/placeholder.png'} 
+                                                                alt={staff.name?.full || 'Character'} 
+                                                                width={44}
+                                                                height={44}
+                                                                className="w-11 h-11 object-cover rounded-md shrink-0 bg-gray-800"
+                                                            />
+                                                            <div>
+                                                                <h4 className="text-sm font-semibold text-white line-clamp-1">
+                                                                    {staff.name?.full || 'Unknown'}
+                                                                </h4>
+                                                                <span className="text-xs text-purple-400 capitalize">
+                                                                    {role ? role.toLowerCase() : 'Supporting'}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                        )}
                 </div>
             </div>
         </div>
     );
-}
+};
 
-export default Page
+export default Page;

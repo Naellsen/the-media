@@ -4,8 +4,8 @@ import YouTube from 'react-youtube';
 
 export default function SimplePlayer({ youtubeId }) {
   const opts = {
-    height: '390',
-    width: '640',
+    height: 'full',
+    width: 'full',
     playerVars: {
       autoplay: 0,
     },

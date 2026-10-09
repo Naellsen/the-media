@@ -67,7 +67,7 @@ const Page = async ({ params }) => {
                     <div className="bg-primary border border-gray-800 rounded-xl p-5 shadow-2xl">
                         <h2 className="text-lg font-bold text-white mb-4">Trailer / Teaser</h2>
                         <div className="relative w-full aspect-video max-w-2xl mx-auto rounded-lg overflow-hidden bg-black border border-gray-800">
-                        <VideoPlayer youtubeId={videoKey} />
+                        <VideoPlayer youtubeId={videoKey}/>
                         </div>
                     </div>
                     ) : (
@@ -76,6 +76,7 @@ const Page = async ({ params }) => {
 
                 <div className="bg-primary border border-gray-800 rounded-xl p-6 shadow-2xl">
                     <div className="flex flex-col md:flex-row gap-8 items-start">
+                        
                         <div className="relative w-full md:w-72 aspect-2/3 bg-gray-900 rounded-lg overflow-hidden shrink-0 border border-gray-800 shadow-lg">
                             <Image
                                 src={posterUrl}

@@ -164,8 +164,33 @@ export const ANILIST_DETAIL_QUERY = `
               medium
             }
           }
+          voiceActors(language: JAPANESE) {
+            id
+            name {
+              full
+            }
+            image {
+              medium
+            }
+            languageV2
+          }
         }
       }
+
+      staff(perPage: 6) {
+      edges {
+        role # Author, Art, Story & Art, etc.
+        node {
+          id
+          name {
+            full
+          }
+          image {
+            medium
+          }
+        }
+      }
+    }
 
       recommendations(perPage: 6) {
         nodes {

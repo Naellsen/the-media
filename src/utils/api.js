@@ -34,3 +34,28 @@ export async function fetchTMDB_API(endpoint, query = "") {
         return null;
     }
 }
+
+// src/utils/api.js
+const COMICVINE_BASE_URL = "https://gamespot.com";
+// NEVER expose your real key in production frontend environments!
+const COMIC_API_KEY = process.env.COMICVINE_API_KEY; 
+const PROXY_URL = "https://corsproxy.io"; // Crucial: Needs /?url=
+
+export async function fetchComicVine_API(endpoint, queryParams = "") {
+    // Fixed: Removed the accidental backslash before the dynamic queryParams expression
+    const params = `api_key=${COMIC_API_KEY}&format=json${queryParams ? `&\${queryParams}` : ""}`;
+    const targetUrl = `${COMICVINE_BASE_URL}/${endpoint}/?${params}`;
+    
+    const finalUrl = `${PROXY_URL}${encodeURIComponent(targetUrl)}`;
+
+    try {
+        const response = await fetch(finalUrl);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        return data.results || data;
+    } catch (error) {
+        console.error("Comic Vine Error:", error);
+        return null;
+    }
+}

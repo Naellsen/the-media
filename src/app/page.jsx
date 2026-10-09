@@ -1,4 +1,4 @@
-import { fetchAniList, fetchTMDB_API } from "@/utils/api";
+import { fetchAniList, fetchComicVine_API, fetchTMDB_API } from "@/utils/api";
 import { TOP_MEDIA_QUERY } from "@/query/query";
 import { formatAniListItem, formatTMDBItem } from "@/utils/formaters";
 import MediaCard from "@/components/MediaCard";
@@ -17,37 +17,40 @@ const Page = async () => {
     const tvData = await fetchTMDB_API("tv/popular");
     const popularTV = tvData?.results ? tvData.results.slice(0,10).map(formatTMDBItem).filter(Boolean): [];
 
+    const comicData = await fetchComicVine_API("issues", "sort=cover_date:desc&limit=10");
+    console.log(comicData)
+
     return(
         <div className="bg-primary-50">
-            <section>
+            <section className="px-30">
                 <h1 className="text-xl font-bold py-5 text-white">Popular Movies</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                    {popularMovies.map((movie) => (
-                        <MediaCard key={movie.id} item={movie}/>
+                    {popularMovies.map((movie, index) => (
+                        <MediaCard key={movie.id} item={movie} index={index}/>
                     ))}
                 </div>
             </section>
-            <section>
+            <section className="px-30">
                 <h1 className="text-xl font-bold py-5 text-white">Popular Tv</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                    {popularTV.map((tv) => (
-                        <MediaCard key={tv.id} item={tv}/>
+                    {popularTV.map((tv, index) => (
+                        <MediaCard key={tv.id} item={tv} index={index}/>
                     ))}
                 </div>
             </section>
-            <section>
+            <section className="px-30">
                 <h1 className="text-xl font-bold py-5 text-white">Popular Anime</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                    {topAnime.map((anime) => (
-                        <MediaCard key={anime.id} item={anime} />
+                    {topAnime.map((anime, index) => (
+                        <MediaCard key={anime.id} item={anime} index={index}/>
                     ))}
                 </div>
             </section>
-            <section>
+            <section className="px-30">
                 <h1 className="text-xl font-bold py-5 text-white">Popular Manga</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                    {topManga.map((manga) => (
-                        <MediaCard key={manga.id} item={manga}/>
+                    {topManga.map((manga, index) => (
+                        <MediaCard key={manga.id} item={manga} index={index}/>
                     ))}
                 </div>
             </section>
