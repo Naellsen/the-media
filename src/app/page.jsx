@@ -23,9 +23,8 @@ const Page = async () => {
     field_list: "id,name,publisher,start_year,count_of_issues,image,deck",
     });
 
-  const popular = formatComicVineList(raw, "volume");
-    console.log(popular);
-
+    const popular = formatComicVineList(raw, "volume");
+    
     return(
         <div className="bg-primary-50">
             <section className="px-30">
