@@ -85,3 +85,59 @@ export function formatAniListItem(item) {
         detailUrl: `/${mediaType}/${item.id}`,
     };
 }
+
+const COMIC_PLACEHOLDER = PLACEHOLDER_IMAGE; // reuse your existing placeholder
+
+function cleanComicDescription(html) {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function formatComicVineItem(item, typeHint = "volume") {
+  if (!item) return null;
+
+  const resource = item.resource_type || typeHint;
+
+  const image =
+    item.image?.super_url ||
+    item.image?.original_url ||
+    item.image?.medium_url ||
+    PLACEHOLDER_IMAGE;
+
+  let title = item.name || "Untitled";
+  let subtitle = "Comic";
+
+  if (resource === "issue") {
+    const seriesName = item.volume?.name;
+    title = item.name || (seriesName ? `${seriesName} #${item.issue_number}` : "Untitled");
+    const date = item.store_date || item.cover_date;
+    const year = date ? date.slice(0, 4) : null;
+    subtitle = `Issue${item.issue_number ? ` #${item.issue_number}` : ""}${year ? ` • ${year}` : ""}`;
+  } else if (resource === "character") {
+    subtitle = `Character${item.publisher?.name ? ` • ${item.publisher.name}` : ""}`;
+  } else {
+    const year = item.start_year || null;
+    subtitle = `Comic${year ? ` • ${year}` : ""}${item.publisher?.name ? ` • ${item.publisher.name}` : ""}`;
+  }
+
+  return {
+    id: `comicvine-${resource}-${item.id}`,
+    rawId: item.id,
+    title,
+    image,
+    score: null,
+    subtitle,
+    description: cleanComicDescription(item.deck || item.description),
+    type: "comic",
+    detailUrl: resource === "volume" ? `/comic/${item.id}` : `/comic/${resource}/${item.id}`,
+  };
+}
+
+export function formatComicVineList(items, typeHint) {
+  return (items || []).map((i) => formatComicVineItem(i, typeHint)).filter(Boolean);
+}

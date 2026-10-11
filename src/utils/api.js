@@ -17,45 +17,53 @@ export async function fetchAniList(query, variables = {}) {
     return null;
   }
 }
+
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = process.env.TMDB_API_KEY;
 
 export async function fetchTMDB_API(endpoint, query = "") {
-    const queryString = query ? `&query=${encodeURIComponent(query)}` : "";
-    const url = `${TMDB_BASE_URL}/${endpoint}?api_key=${API_KEY}${queryString}`;
+  const queryString = query ? `&query=${encodeURIComponent(query)}` : "";
+  const url = `${TMDB_BASE_URL}/${endpoint}?api_key=${API_KEY}${queryString}`;
 
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Failed to fetch TMDB data:", error);
-        return null;
-    }
+  try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error("Failed to fetch TMDB data:", error);
+      return null;
+  }
 }
 
-// src/utils/api.js
-const COMICVINE_BASE_URL = "https://gamespot.com";
-// NEVER expose your real key in production frontend environments!
-const COMIC_API_KEY = process.env.COMICVINE_API_KEY; 
-const PROXY_URL = "https://corsproxy.io"; // Crucial: Needs /?url=
+const COMIC_BASE_URL = "https://comicvine.gamespot.com/api";
 
-export async function fetchComicVine_API(endpoint, queryParams = "") {
-    // Fixed: Removed the accidental backslash before the dynamic queryParams expression
-    const params = `api_key=${COMIC_API_KEY}&format=json${queryParams ? `&\${queryParams}` : ""}`;
-    const targetUrl = `${COMICVINE_BASE_URL}/${endpoint}/?${params}`;
-    
-    const finalUrl = `${PROXY_URL}${encodeURIComponent(targetUrl)}`;
+export async function fetchComicVine(resource, params = {}) {
+  try {
+    const query = new URLSearchParams({
+      api_key: process.env.COMICVINE_API_KEY,
+      format: "json",
+      ...params,
+    });
 
-    try {
-        const response = await fetch(finalUrl);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
-        const data = await response.json();
-        return data.results || data;
-    } catch (error) {
-        console.error("Comic Vine Error:", error);
-        return null;
+    const res = await fetch(`${COMIC_BASE_URL}/${resource}/?${query}`, {
+      headers: {
+        "User-Agent": "MyComicApp/1.0",
+        Accept: "application/json",
+      },
+      cache: "no-store", // Next.js: always fetch fresh data
+    });
+
+    const json = await res.json();
+
+    if (json?.status_code !== 1) {
+      console.error("Comic Vine API Error:", json?.error);
+      return null;
     }
+
+    return json.results || null;
+  } catch (error) {
+    console.error("Comic Vine Fetch Error:", error);
+    return null;
+  }
 }
