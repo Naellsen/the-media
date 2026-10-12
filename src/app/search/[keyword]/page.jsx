@@ -34,7 +34,6 @@ const Page = async ({ params }) => {
     const tmdbResults = rawTMDB.map(formatTMDBItem);
 
     const results = await searchComics(decodedKeyword);
-    console.log(results)
 
     return (
         <div className="container mx-auto p-4 space-y-10">

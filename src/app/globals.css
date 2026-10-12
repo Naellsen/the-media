@@ -8,3 +8,83 @@
   --color-secondary-100: #222222;
   --color-accent: #F9F6F0;
 }
+
+.comic-wiki {
+  display: flow-root;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--color-accent, #F9F6F0) 85%, transparent);
+}
+
+
+.comic-wiki h2{
+  color: var(--color-accent);
+  font-size: x-large;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.comic-wiki h3,
+.comic-wiki h4,
+.comic-wiki strong,
+.comic-wiki b {
+  color: var(--color-accent, #F9F6F0);
+}
+
+.comic-wiki a {
+  color: var(--color-secondary-50, #FFB300);
+  text-decoration: none;
+}
+.comic-wiki a:hover {
+  text-decoration: underline;
+}
+
+.comic-wiki figcaption {
+  color: color-mix(in srgb, var(--color-accent, #F9F6F0) 60%, transparent);
+  opacity: 1; /* replaces the earlier opacity: 0.7 */
+}
+
+/* Alignment: class names or data attributes */
+.comic-wiki figure.align-right,
+.comic-wiki figure[class*="right"],
+.comic-wiki figure[data-align="right"] {
+  float: right;
+  margin-left: 1.5rem;
+}
+
+.comic-wiki figure.align-left,
+.comic-wiki figure[class*="left"],
+.comic-wiki figure[data-align="left"] {
+  float: left;
+  margin-right: 1.5rem;
+}
+
+.comic-wiki figure.align-center,
+.comic-wiki figure[class*="center"],
+.comic-wiki figure[data-align="center"] {
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Sizes */
+.comic-wiki figure[class*="tiny"],
+.comic-wiki figure[data-size="tiny"]   { width: 22%; }
+.comic-wiki figure[class*="small"],
+.comic-wiki figure[data-size="small"]  { width: 38%; }
+.comic-wiki figure[class*="medium"],
+.comic-wiki figure[data-size="medium"] { width: 45%; }
+.comic-wiki figure[class*="large"],
+.comic-wiki figure[data-size="large"]  { width: 55%; }
+.comic-wiki figure[class*="full"],
+.comic-wiki figure[data-size="full"]   { width: 100%; float: none; margin-left: 0; margin-right: 0; }
+
+/* Phones: stack */
+@media (max-width: 640px) {
+  .comic-wiki figure {
+    float: none !important;
+    width: 100% !important;
+    margin: 0 0 1rem !important;
+  }
+}
