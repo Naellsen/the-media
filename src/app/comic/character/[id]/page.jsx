@@ -124,7 +124,7 @@ const Page = async ({ params }) => {
   const recentIssues = await getRecentIssues(character.issue_credits);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto py-8 px-40">
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1 min-w-0 space-y-6">
           <h1 className="text-3xl font-bold text-accent">{character.name}</h1>

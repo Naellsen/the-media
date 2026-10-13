@@ -20,12 +20,18 @@
 .comic-wiki h2{
   color: var(--color-accent);
   font-size: x-large;
-  font-weight: bold;
+  font-weight: bolder;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-.comic-wiki h3,
+.comic-wiki h3{
+  color: var(--color-accent);
+  font-size: large;
+  font-weight: 700;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 .comic-wiki h4,
 .comic-wiki strong,
 .comic-wiki b {
@@ -42,7 +48,7 @@
 
 .comic-wiki figcaption {
   color: color-mix(in srgb, var(--color-accent, #F9F6F0) 60%, transparent);
-  opacity: 1; /* replaces the earlier opacity: 0.7 */
+  opacity: 1; 
 }
 
 /* Alignment: class names or data attributes */

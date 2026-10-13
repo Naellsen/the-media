@@ -7,7 +7,7 @@ export async function fetchAniList(query, variables = {}) {
         Accept: "application/json",
       },
       body: JSON.stringify({ query, variables }),
-      cache: "no-store", // Force Next.js to bypass the cache and grab fresh data
+      next: { revalidate: 3600 }, // Force Next.js to bypass the cache and grab fresh data
     });
 
     const json = await res.json();

@@ -21,10 +21,10 @@ export function cleanComicHtml(html) {
     allowedAttributes: {
       a: ["href"],
       img: ["src", "alt"],
-      // keep ALL classes and the data-* attributes on figures
       figure: ["class", "data-align", "data-size"],
     },
-    // no allowedClasses here, so every class on the figure is kept
+    // Drop these tags AND everything inside them
+    nonTextTags: ["style", "script", "textarea", "option", "noscript"],
     transformTags: {
       img: (tagName, attribs) => ({
         tagName,
