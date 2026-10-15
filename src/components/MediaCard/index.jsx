@@ -62,4 +62,4 @@ const MediaCard = ({ item, index }) => {
   );
 };
 
-export default MediaCard;
+export default MediaCard

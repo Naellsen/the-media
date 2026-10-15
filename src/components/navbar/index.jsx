@@ -1,4 +1,6 @@
 import InputSearch from './InputSearch';
+import Link from 'next/link';
+import UserActionButton from './useractionbtn';
 
 const Navbar =  () => {
 
@@ -25,6 +27,7 @@ const Navbar =  () => {
                 </a>
                 </nav>
             </div>
+            <UserActionButton/>
         </header>
     );
 }

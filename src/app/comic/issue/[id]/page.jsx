@@ -122,7 +122,7 @@ const Page = async ({ params }) => {
     <div className="container mx-auto p-4 space-y-10">
       {/* Header (same layout as the comic page) */}
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="relative w-full md:w-72 aspect-[2/3] shrink-0 rounded-lg overflow-hidden bg-primary">
+        <div className="relative w-full md:w-72 aspect-2/3 shrink-0 rounded-lg overflow-hidden bg-primary">
           <Image
             src={cover}
             alt={title}

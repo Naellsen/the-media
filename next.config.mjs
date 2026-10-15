@@ -14,6 +14,7 @@ const nextConfig = {
       },
       { protocol: "https", hostname: "comicvine.gamespot.com" },
       { protocol: "https", hostname: "static.comicvine.com" },
+      {hostname: "avatars.githubusercontent.com"}
     ],
   },
 };
