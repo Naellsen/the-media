@@ -26,8 +26,9 @@ const Navbar =  () => {
                 <a href="/journal" className="transition-colors duration-150 hover:text-white">Journal
                 </a>
                 </nav>
+                <UserActionButton/>
             </div>
-            <UserActionButton/>
+            
         </header>
     );
 }
