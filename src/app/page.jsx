@@ -24,6 +24,8 @@ const Page = async () => {
     });
     const popularComics = formatComicVineList(raw, "volume");
 
+
+
     return (
         <main className="px-20">
             <section>

@@ -45,6 +45,10 @@ const Page = async ({ params }) => {
 
     const credit = await fetchTMDB_API(`movie/${id}/credits`)
     const cast = credit.cast?.slice(0, 6) || [];
+
+    const rawReview = await fetchTMDB_API(`movie/${id}/reviews`)
+    const review = rawReview.results.slice(0,6);
+    console.log(review)
     
 
     return (
@@ -159,6 +163,20 @@ const Page = async ({ params }) => {
                     </div>
                 )}
             </div>
+            {review.length > 0 && (
+                    <div className="">
+                        <h2 className="text-2xl text-accent">Reviews</h2>
+                        <div>
+                            {review.map((reviews) => (
+                            <div key={reviews.id} className="flex flex-col grid-cols-2">
+                                <h2 >{reviews.author}</h2>
+                                <h4>@{reviews.author_details?.username}</h4>
+                                <p className="text-xs">{reviews.content}</p>
+                            </div>
+                            ))}
+                        </div>
+                    </div>
+            )}
         </div>
     );
 };

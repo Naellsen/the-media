@@ -13,8 +13,8 @@ const MediaCard = ({ item, index }) => {
   
   return (
     <Link href={href}>
-      <div className="flex flex-col bg-slate-900 border border-slate-800 overflow-hidden shadow-md">
-        <div className="group/poster relative h-80 w-full overflow-hidden bg-slate-950">
+      <div className="flex flex-col border hover:border-b-cyan-950">
+        <div className="group/poster relative h-100 w-full overflow-hidden bg-slate-950">
           <Image
             src={validSrc}
             alt={title || "Media Poster"}
@@ -32,7 +32,7 @@ const MediaCard = ({ item, index }) => {
           )}
 
           {displayScore && (
-            <span className="absolute top-2 right-2 z-20 bg-slate-950/80 backdrop-blur-md text-amber-400 text-xs font-bold px-2 py-1 rounded shadow">
+            <span className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-center z-10 pointer-events-none text-amber-600">
               {displayScore}
             </span>
           )}
@@ -40,21 +40,10 @@ const MediaCard = ({ item, index }) => {
           {description && (
             <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-center z-10 pointer-events-none">
               <p className="text-xs text-slate-300 line-clamp-6 leading-relaxed text-center">
-                {description}
+                {title}
               </p>
             </div>
           )}
-        </div>
-
-        <div className="p-3 flex flex-col grow justify-between bg-slate-900">
-          <div>
-            <h3 className="font-semibold text-sm line-clamp-1 text-slate-100">
-              {title || "Untitled"}
-            </h3>
-            {subtitle && (
-              <p className="text-xs text-slate-400 mt-0.5 font-medium">{subtitle}</p>
-            )}
-          </div>
         </div>
       </div>
     </Link>
