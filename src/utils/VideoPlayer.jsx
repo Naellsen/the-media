@@ -4,12 +4,19 @@ import YouTube from 'react-youtube';
 
 export default function SimplePlayer({ youtubeId }) {
   const opts = {
-    height: 'full',
-    width: 'full',
     playerVars: {
       autoplay: 0,
     },
   };
 
-  return <YouTube videoId={youtubeId} opts={opts} />;
+  return (
+    <div className="absolute inset-0 w-full h-full">
+      <YouTube 
+        videoId={youtubeId} 
+        opts={opts} 
+        className="w-full h-full"
+        iframeClassName="w-full h-full"
+      />
+    </div>
+  );
 }

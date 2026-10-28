@@ -72,7 +72,7 @@ const Page = async ({ params }) => {
                                     </div>
                                     ) : (
                                     <p className="text-gray-400 items-center sp">No trailer available for this Tv Series.</p>
-                                )}
+                )}
 
                 <div className="bg-primary border border-gray-800 rounded-xl p-6 shadow-2xl">
                     <div className="flex flex-col md:flex-row gap-8 items-start">
