@@ -11,6 +11,7 @@ const Page = async ({ params }) => {
     const movie = await fetchTMDB_API(`movie/${id}`, {
         append_to_response: "videos,credits",
     }).catch(() => null);
+    console.log(movie)
 
     if (!movie || movie.status_code === 34) {
         return (
@@ -26,7 +27,7 @@ const Page = async ({ params }) => {
     const releaseYear = movie.release_date ? movie.release_date.split("-")[0] : null;
     const runtimeHours = movie.runtime ? Math.floor(movie.runtime / 60) : 0;
     const runtimeMins = movie.runtime ? movie.runtime % 60 : 0;
-    
+ 
 
     const posterUrl = movie.poster_path
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -52,7 +53,6 @@ const Page = async ({ params }) => {
 
     const rawReview = await fetchTMDB_API(`movie/${id}/reviews`)
     const review = rawReview.results.slice(0,6);
-    console.log(review)
     
 
     return (
@@ -105,6 +105,19 @@ const Page = async ({ params }) => {
                 ) : (
                     <p className="text-gray-400 items-center sp">No trailer available for this Tv Series.</p>
                 )}
+            </div>
+            
+            <div className="genres-container">
+                
+                {movie.genres.map(genre => (
+                    <Link 
+                    key={genre.id} 
+                    href={`/genre/${genre.name.toLowerCase().replace(/\s+/g, '-')}`} 
+                    className="genre-badge"
+                    >
+                    {genre.name}
+                    </Link>
+                ))}
             </div>
         </div>
     )
