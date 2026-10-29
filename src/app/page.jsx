@@ -29,8 +29,8 @@ const Page = async () => {
     return (
         <main className="px-20">
             <section>
-                <h1 className="text-white font-bold text-2xl gap-4">Popular Movies</h1>  
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 pt-5">
+                <h1 className="text-white font-bold text-2xl my-4">Popular On The Media</h1>  
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
                     {popularMovies.map((movie) => (
                         <MediaCard key={movie.id} item={movie} />
                     ))}

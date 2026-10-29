@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchTMDB_API } from "@/utils/api";
 import VideoPlayer from "@/utils/VideoPlayer";
+import { Star, StarIcon } from "lucide-react";
+import { StarHalfIcon } from "@phosphor-icons/react";
 
 const Page = async ({ params }) => {
     const { id } = await params;
@@ -20,9 +22,11 @@ const Page = async ({ params }) => {
     }
 
     const title = movie.title || "Untitled";
+    const vote = movie.vote_average.toFixed(1);
     const releaseYear = movie.release_date ? movie.release_date.split("-")[0] : null;
     const runtimeHours = movie.runtime ? Math.floor(movie.runtime / 60) : 0;
     const runtimeMins = movie.runtime ? movie.runtime % 60 : 0;
+    
 
     const posterUrl = movie.poster_path
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -39,7 +43,7 @@ const Page = async ({ params }) => {
     const trailer = videoData?.results?.find(
     (v) => v.site === 'YouTube' && v.type === 'Trailer'
     ) || videoData?.results?.find(
-    (v) => v.site === 'YouTube' // Fallback to any YouTube video (teaser/clip) if no official trailer exists
+    (v) => v.site === 'YouTube'
     );
     const videoKey = trailer?.key;
 
@@ -54,7 +58,7 @@ const Page = async ({ params }) => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center text-white">
             {backdropUrl && (
-                <div className="relative w-full h-64">
+                <div className="relative w-full">
                     <Image
                     src={backdropUrl}
                     alt={`${title} backdrop`}
@@ -64,7 +68,27 @@ const Page = async ({ params }) => {
                 </div>
             )}
 
-            <div className="relative flex w-4/5 bg-secondary-50 items-center justify-center m-10">
+            <div className="flex flex-row w-4/5 justify-between font-bold">
+                <div className="flex flex-col">
+                    <h1 className="text-2xl">{title}</h1>
+                    <div className="flex flex-row gap-2 text-xs text-gray-500">
+                        <p>{releaseYear}</p>
+                        <p>{runtimeHours}.{runtimeMins}h</p>
+                    </div>
+                </div>
+                <div className="relative flex flex-row font-bold gap-4">
+                        <div className="gap-2">
+                            <Star size={32} color="#d8f500" weight="fill"/>
+                            <h1 className="text-2xl">{vote}/10</h1>
+                        </div>
+                        <div>
+                            <button><Star size={20} color=""/></button>
+                        </div>
+                </div>
+                
+            </div>
+
+            <div className="relative flex w-4/5 items-center justify-center mt-4 gap-4">
                 <div className="relative w-60 aspect-2/3 overflow-hidden shrink-0 shadow-lg">
                     <Image
                     src={posterUrl}
