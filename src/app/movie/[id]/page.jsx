@@ -49,7 +49,7 @@ const Page = async ({ params }) => {
     const videoKey = trailer?.key;
 
     const credit = await fetchTMDB_API(`movie/${id}/credits`)
-    const cast = credit.cast?.slice(0, 6) || [];
+    const cast = credit?.cast?.slice(0 , 10) || [];
 
     const rawReview = await fetchTMDB_API(`movie/${id}/reviews`)
     const review = rawReview.results.slice(0,6);
@@ -107,18 +107,55 @@ const Page = async ({ params }) => {
                 )}
             </div>
             
-            <div className="genres-container">
-                
+            <div className="flex gap-4 w-4/5 mt-4">
                 {movie.genres.map(genre => (
                     <Link 
                     key={genre.id} 
                     href={`/genre/${genre.name.toLowerCase().replace(/\s+/g, '-')}`} 
-                    className="genre-badge"
+                    className="border border-white rounded-4xl p-1.5"
                     >
                     {genre.name}
                     </Link>
                 ))}
             </div>
+
+            <div className="w-4/5">
+                <p className="mt-4">{movie.overview}</p>
+            </div>
+
+            <div className=" flex w-4/5 mt-4">
+                <div className="w-3/5">
+                    <h1 className="text-2xl font-bold">Top Cast</h1>
+                    <div className="grid grid-cols-2">
+                        {cast.map ((actor) => (
+                            <div key={actor.id} className="rounded-lg overflow-clip mt-5 flex flex-row items-center">
+                                <div className="relative w-20 aspect-square rounded-full overflow-hidden">
+                                    <Image 
+                                        src={
+                                            actor.profile_path
+                                            ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                                            : "/placeholder.png"
+                                        }
+                                        alt={actor.name}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <div className="flex flex-col w-fit p-2 font-bold">
+                                    <p className="text-md">{actor.name}</p>
+                                    <p className="text-xs">{actor.character}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    
+                </div>
+                <div>
+                    <h1>Ranks</h1>
+                </div>
+            </div>
+
+            
         </div>
     )
 }
