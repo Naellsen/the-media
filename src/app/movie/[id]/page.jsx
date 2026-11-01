@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchTMDB_API } from "@/utils/api";
 import VideoPlayer from "@/utils/VideoPlayer";
-import { Star, StarIcon } from "lucide-react";
+import { MoreHorizontal, MoreVertical, Star, StarIcon } from "lucide-react";
 import { StarHalfIcon } from "@phosphor-icons/react";
 
 const Page = async ({ params }) => {
@@ -130,16 +130,18 @@ const Page = async ({ params }) => {
                         {cast.map ((actor) => (
                             <div key={actor.id} className="rounded-lg overflow-clip mt-5 flex flex-row items-center">
                                 <div className="relative w-20 aspect-square rounded-full overflow-hidden">
-                                    <Image 
-                                        src={
-                                            actor.profile_path
-                                            ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-                                            : "/placeholder.png"
-                                        }
-                                        alt={actor.name}
-                                        fill
-                                        className="object-cover"
-                                    />
+                                    <Link key={actor.id} href={`/actor/${actor.id}`}>
+                                        <Image 
+                                            src={
+                                                actor.profile_path
+                                                ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                                                : "/placeholder.png"
+                                            }
+                                            alt={actor.name}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </Link>
                                 </div>
                                 <div className="flex flex-col w-fit p-2 font-bold">
                                     <p className="text-md">{actor.name}</p>
@@ -147,10 +149,13 @@ const Page = async ({ params }) => {
                                 </div>
                             </div>
                         ))}
+                        <div className="mt-4 w-3/5 font-bold flex flex-row justify-center">
+                            <p>Show other actor details</p>
+                            <MoreVertical size={20}/>
+                        </div>
                     </div>
-                    
                 </div>
-                <div>
+                <div className="w-2/5">
                     <h1>Ranks</h1>
                 </div>
             </div>
