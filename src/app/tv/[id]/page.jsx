@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchTMDB_API } from "@/utils/api";
 import VideoPlayer from "@/utils/VideoPlayer";
+import { Star } from "lucide-react";
 
 
 const Page = async ({ params }) => {
@@ -11,7 +12,6 @@ const Page = async ({ params }) => {
 
     const show = await fetchTMDB_API(`tv/${id}`, {
     append_to_response: "videos,credits",
-    include_video_language: "en,null", 
     }).catch(() => null);
 
     if (!show || show.status_code === 34) {
@@ -48,123 +48,110 @@ const Page = async ({ params }) => {
     const cast = response?.cast?.slice(0, 6) || [];
     
     return (
-        <div className="min-h-screen bg-primary text-white">
+        <div className="min-h-screen flex flex-col items-center justify-center text-white">
             {backdropUrl && (
-                <div className="relative w-full h-64 sm:h-80 md:h-96 bg-gray-900">
+                <div className="relative w-full">
                     <Image
-                        src={backdropUrl}
-                        alt={`${title} backdrop`}
-                        fill
-                        className="object-cover opacity-60"
-                        priority
+                    src={backdropUrl}
+                    alt={`${title} backdrop`}
+                    fill
+                    className="object-cover opacity-50"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-[#0d0f12] via-[#0d0f12]/40 to-transparent" />
                 </div>
             )}
 
-            <div className="container mx-auto px-4 py-6 space-y-6 -mt-20 relative z-10">
-                {videoKey ? (
-                                    <div className="bg-primary border border-gray-800 rounded-xl p-5 shadow-2xl">
-                                        <h2 className="text-lg font-bold text-white mb-4">Trailer / Teaser</h2>
-                                        <div className="relative w-full aspect-video max-w-2xl mx-auto rounded-lg overflow-hidden bg-black border border-gray-800">
-                                        <VideoPlayer youtubeId={videoKey} />
-                                        </div>
-                                    </div>
-                                    ) : (
-                                    <p className="text-gray-400 items-center sp">No trailer available for this Tv Series.</p>
-                )}
-
-                <div className="bg-primary border border-gray-800 rounded-xl p-6 shadow-2xl">
-                    <div className="flex flex-col md:flex-row gap-8 items-start">
-                        <div className="relative w-full md:w-72 aspect-2/3 bg-gray-900 rounded-lg overflow-hidden shrink-0 border border-gray-800 shadow-lg">
-                            <Image
-                                src={posterUrl}
-                                alt={title}
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                        </div>
-
-                        <div className="flex-1 space-y-4">
-                            <div className="flex items-center gap-3">
-                                <span className="px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded uppercase tracking-wider">
-                                    TV Show
-                                </span>
-                                {show.vote_average > 0 && (
-                                    <span className="text-yellow-400 font-bold text-sm">
-                                        ★ {show.vote_average.toFixed(1)} / 10
-                                    </span>
-                                )}
-                            </div>
-
-                            <div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-white">{title}</h1>
-                                {show.tagline && (
-                                    <p className="text-sm italic text-gray-400 mt-1">&quot;{show.tagline}&quot;</p>
-                                )}
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-300">
-                                {releaseYear && <span>First Aired: <strong className="text-white">{releaseYear}</strong></span>}
-                                {seasonsCount > 0 && <span>Seasons: <strong className="text-white">{seasonsCount}</strong></span>}
-                                {episodesCount > 0 && <span>Episodes: <strong className="text-white">{episodesCount}</strong></span>}
-                                {show.status && <span>Status: <strong className="text-white">{show.status}</strong></span>}
-                            </div>
-
-                            {show.genres?.length > 0 && (
-                                <div className="flex flex-wrap gap-2 pt-1">
-                                    {show.genres.map((genre) => (
-                                        <Link
-                                            key={genre.id}
-                                            href={`/genre/${encodeURIComponent(genre.name.toLowerCase())}`}
-                                            className="px-3 py-1 bg-[#222831] hover:bg-green-600 text-gray-300 hover:text-white text-xs font-medium rounded transition-colors duration-200"
-                                        >
-                                            {genre.name}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-
-                            <div className="pt-2">
-                                <h3 className="text-sm font-semibold text-white mb-1">Overview</h3>
-                                <p className="text-gray-300 text-xs md:text-sm leading-relaxed">
-                                    {show.overview || "No overview available."}
-                                </p>
-                            </div>
-                        </div>
+            <div className="flex flex-row w-4/5 justify-between font-bold">
+                <div className="flex flex-col">
+                    <h1 className="text-2xl">{title}</h1>
+                    <div className="flex flex-row gap-2 text-xs text-gray-500">
+                        <p>{releaseYear}</p>
+                        <p>{seasonsCount}.{episodesCount}h</p>
                     </div>
                 </div>
+                <div className="relative flex flex-row font-bold gap-4">
+                        <div className="gap-2">
+                            <Star size={32} color="#d8f500" weight="fill"/>
+                            <h1 className="text-2xl">{vote}/10</h1>
+                        </div>
+                        <div>
+                            <button><Star size={20} color=""/></button>
+                        </div>
+                </div>
+                
+            </div>
 
-                {cast.length > 0 && (
-                    <div className="bg-primary border border-gray-800 rounded-xl p-6 shadow-2xl">
-                        <h2 className="text-lg font-bold text-white mb-4">Top Cast</h2>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-                            {cast.map((actor) => (
-                                <div
-                                    key={actor.id}
-                                    className="bg-[#0f1217] rounded-lg overflow-hidden border border-gray-800/80 p-2 text-center"
-                                >
-                                    <div className="relative w-full aspect-square bg-gray-900 rounded-md overflow-hidden mb-2">
-                                        <Image
+            <div className="relative flex w-4/5 items-center justify-center mt-4 gap-4">
+                <div className="relative w-60 aspect-2/3 overflow-hidden shrink-0 shadow-lg">
+                    <Image
+                    src={posterUrl}
+                    alt={title}
+                    fill
+                    className="relative object-cover left-10"/>
+                </div>
+                {videoKey ? (
+                    <div className="relative w-full h-90 aspect-video overflow-hidden bg-accent">
+                        <VideoPlayer
+                            youtubeId={videoKey}
+                        />
+                    </div>
+                ) : (
+                    <p className="text-gray-400 items-center sp">No trailer available for this Tv Series.</p>
+                )}
+            </div>
+            
+            <div className="flex gap-4 w-4/5 mt-4">
+                {movie.genres.map(genre => (
+                    <Link 
+                    key={genre.id} 
+                    href={`/genre/${genre.name.toLowerCase().replace(/\s+/g, '-')}`} 
+                    className="border border-white rounded-4xl p-1.5"
+                    >
+                    {genre.name}
+                    </Link>
+                ))}
+            </div>
+
+            <div className="w-4/5">
+                <p className="mt-4">{movie.overview}</p>
+            </div>
+
+            <div className=" flex w-4/5 mt-4">
+                <div className="w-3/5">
+                    <h1 className="text-2xl font-bold">Top Cast</h1>
+                    <div className="grid grid-cols-2">
+                        {cast.map ((actor) => (
+                            <div key={actor.id} className="rounded-lg overflow-clip mt-5 flex flex-row items-center">
+                                <div className="relative w-20 aspect-square rounded-full overflow-hidden">
+                                    <Link key={actor.id} href={`/actor/${actor.id}`}>
+                                        <Image 
                                             src={
                                                 actor.profile_path
-                                                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-                                                    : "/placeholder.png"
+                                                ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                                                : "/placeholder.png"
                                             }
                                             alt={actor.name}
                                             fill
                                             className="object-cover"
                                         />
-                                    </div>
-                                    <p className="text-xs font-semibold text-white truncate">{actor.name}</p>
-                                    <p className="text-[10px] text-gray-400 truncate mt-0.5">{actor.character}</p>
+                                    </Link>
                                 </div>
-                            ))}
-                        </div>
+                                <div className="flex flex-col w-fit p-2 font-bold">
+                                    <p className="text-md">{actor.name}</p>
+                                    <p className="text-xs">{actor.character}</p>
+                                </div>
+                            </div>
+                        ))}
+                        <button className="p-4 w-full font-bold flex flex-row justify-center cursor-">
+                            <p>Show other actor details</p>
+                            <MoreVertical size={20}/>
+                        </button>
                     </div>
-                )}
+                </div>
+                <div className="w-2/5">
+                    <h1>Ranks</h1>
+                </div>
             </div>
+            
         </div>
     );
 };

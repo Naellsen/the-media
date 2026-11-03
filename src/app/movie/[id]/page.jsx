@@ -149,17 +149,16 @@ const Page = async ({ params }) => {
                                 </div>
                             </div>
                         ))}
-                        <div className="mt-4 w-3/5 font-bold flex flex-row justify-center">
+                        <button className="p-4 w-full font-bold flex flex-row justify-center cursor-">
                             <p>Show other actor details</p>
                             <MoreVertical size={20}/>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <div className="w-2/5">
                     <h1>Ranks</h1>
                 </div>
             </div>
-
             
         </div>
     )
