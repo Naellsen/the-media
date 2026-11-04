@@ -27,26 +27,26 @@ const Page = async () => {
 
 
     return (
-        <main className="px-20">
-            <section>
+        <main className="relative flex items-center">
+            <section className="w-3/5">
                 <h1 className="text-white font-bold text-2xl my-4">Popular On The Media</h1>  
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-                    {popularMovies.map((movie) => (
-                        <MediaCard key={movie.id} item={movie} />
-                    ))}
-                    {popularTV.map((tv) => (
-                        <MediaCard key={tv.id} item={tv} />
-                    ))}
-                    {topAnime.map((anime) => (
-                        <MediaCard key={anime.id} item={anime} />
-                    ))}
-                    {topManga.map((manga) => (
-                        <MediaCard key={manga.id} item={manga} />
-                    ))}
-                    {popularComics.map((comics) => (
-                        <MediaCard key={comics.id} item={comics} />
-                    ))}
-                </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                        {popularMovies.map((movie) => (
+                            <MediaCard key={movie.id} item={movie} />
+                        ))}
+                        {popularTV.map((tv) => (
+                            <MediaCard key={tv.id} item={tv} />
+                        ))}
+                        {topAnime.map((anime) => (
+                            <MediaCard key={anime.id} item={anime} />
+                        ))}
+                        {topManga.map((manga) => (
+                            <MediaCard key={manga.id} item={manga} />
+                        ))}
+                        {popularComics.map((comics) => (
+                            <MediaCard key={comics.id} item={comics} />
+                        ))}
+                    </div>
             </section>
         </main>
     );

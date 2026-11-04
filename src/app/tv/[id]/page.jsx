@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchTMDB_API } from "@/utils/api";
 import VideoPlayer from "@/utils/VideoPlayer";
-import { Star } from "lucide-react";
+import { MoreVertical, Star } from "lucide-react";
 
 
 const Page = async ({ params }) => {
@@ -33,8 +33,8 @@ const Page = async ({ params }) => {
 
     const title = show.name || "Untitled";
     const releaseYear = show.first_air_date ? show.first_air_date.split("-")[0] : null;
-    const seasonsCount = show.number_of_seasons || 0;
-    const episodesCount = show.number_of_episodes || 0;
+    const runtimeMins = show.runtime ? show.runtime % 60 : 0;
+    const vote = show.vote_average.toFixed(1);
 
     const posterUrl = show.poster_path
         ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
@@ -65,7 +65,7 @@ const Page = async ({ params }) => {
                     <h1 className="text-2xl">{title}</h1>
                     <div className="flex flex-row gap-2 text-xs text-gray-500">
                         <p>{releaseYear}</p>
-                        <p>{seasonsCount}.{episodesCount}h</p>
+                        <p>{runtimeMins}m</p>
                     </div>
                 </div>
                 <div className="relative flex flex-row font-bold gap-4">
@@ -95,12 +95,12 @@ const Page = async ({ params }) => {
                         />
                     </div>
                 ) : (
-                    <p className="text-gray-400 items-center sp">No trailer available for this Tv Series.</p>
+                    <p className="text-gray-400 items-center">No trailer available for this Tv Series.</p>
                 )}
             </div>
             
             <div className="flex gap-4 w-4/5 mt-4">
-                {movie.genres.map(genre => (
+                {show.genres.map(genre => (
                     <Link 
                     key={genre.id} 
                     href={`/genre/${genre.name.toLowerCase().replace(/\s+/g, '-')}`} 
@@ -112,7 +112,7 @@ const Page = async ({ params }) => {
             </div>
 
             <div className="w-4/5">
-                <p className="mt-4">{movie.overview}</p>
+                <p className="mt-4">{show.overview}</p>
             </div>
 
             <div className=" flex w-4/5 mt-4">
