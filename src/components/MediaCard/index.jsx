@@ -13,36 +13,23 @@ const MediaCard = ({ item, index }) => {
   
   return (
     <Link href={href}>
-      <div className="flex flex-col border hover:border-b-cyan-950">
-        <div className="group/poster relative h-100 w-full overflow-hidden bg-slate-950">
-          <Image
-            src={validSrc}
-            alt={title || "Media Poster"}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-            className="object-cover transition-transform duration-500 group-hover/poster:scale-110 w-fu"
-            unoptimized={validSrc.startsWith("data:")}
-            loading="eager"
-          />
+      <div className="flex flex-col border-4 hover:border-gray-500 rounded-xl overflow-hidden bg-slate-950">
+        <div className="group relative h-60 w-full">
+          <div className="relative w-full h-full">
+            <Image
+              src={validSrc}
+              alt={title || "Media Poster"}
+              fill
+              className="object-cover object-center transition-transform duration-500"
+              unoptimized={validSrc.startsWith("data:")}
+              loading="eager"
+            />
+          </div>
 
           {typeof index === "number" && (
             <span className="absolute top-2 left-2 z-20 bg-secondary-100 backdrop-blur-md text-white text-xs font-extrabold px-2 py-1 rounded shadow-md">
               #{index + 1}
             </span>
-          )}
-
-          {displayScore && (
-            <span className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-center z-10 pointer-events-none text-amber-600">
-              {displayScore}
-            </span>
-          )}
-
-          {description && (
-            <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-center z-10 pointer-events-none">
-              <p className="text-xs text-slate-300 line-clamp-6 leading-relaxed text-center">
-                {title}
-              </p>
-            </div>
           )}
         </div>
       </div>

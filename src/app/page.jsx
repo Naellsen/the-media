@@ -27,10 +27,13 @@ const Page = async () => {
 
 
     return (
-        <main className="relative flex items-center">
-            <section className="w-3/5">
-                <h1 className="text-white font-bold text-2xl my-4">Popular On The Media</h1>  
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div className="min-h-screen flex justify-center w-full">
+            <div className="w-3/5">
+                <div className="flex justify-between">
+                    <h1 className="text-white">Test</h1>
+                    <h1 className="text-white">Test</h1>                
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                         {popularMovies.map((movie) => (
                             <MediaCard key={movie.id} item={movie} />
                         ))}
@@ -46,9 +49,9 @@ const Page = async () => {
                         {popularComics.map((comics) => (
                             <MediaCard key={comics.id} item={comics} />
                         ))}
-                    </div>
-            </section>
-        </main>
+                </div>
+            </div>
+        </div>
     );
 };
 
