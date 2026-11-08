@@ -124,7 +124,7 @@ const Page = async ({ params }) => {
             </div>
 
             <div className=" flex w-4/5 mt-4">
-                <div className="w-3/5">
+                <div className="w-full">
                     <h1 className="text-2xl font-bold">Top Cast</h1>
                     <div className="grid grid-cols-2">
                         {cast.map ((actor) => (
@@ -153,10 +153,30 @@ const Page = async ({ params }) => {
                             <p>Show other actor details</p>
                             <MoreVertical size={20}/>
                         </button>
+                        {review?.map((item) => {
+                            // 1. Extract avatar_path safely from author_details
+                            const avatarPath = item.author_details?.avatar_path;
+                            
+                            // 2. Build full URL or fall back if null
+                            const avatarUrl = avatarPath 
+                                ? avatarPath.startsWith('http') 
+                                    ? avatarPath.replace(/^\//, '') // Handles full URLs (e.g., Gravatar links)
+                                    : `https://image.tmdb.org/t/p/w185${avatarPath}`
+                                : 'https://via.placeholder.com/150'; // Default fallback avatar image
+
+                            return (
+                                <div key={item.id}>
+                                    <img 
+                                        src={avatarUrl} 
+                                        alt={item.author} 
+                                        style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
+                                    />
+                                    <h1>{item.author}</h1>
+                                    <p>{item.content}</p>
+                                </div>
+                            );
+                        })}
                     </div>
-                </div>
-                <div className="w-2/5">
-                    <h1>Ranks</h1>
                 </div>
             </div>
             

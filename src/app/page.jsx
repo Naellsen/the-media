@@ -24,8 +24,6 @@ const Page = async () => {
     });
     const popularComics = formatComicVineList(raw, "volume");
 
-
-
     return (
         <div className="min-h-screen flex justify-center w-full">
             <div className="w-3/5">
