@@ -53,7 +53,13 @@ const Page = async ({ params }) => {
 
     const rawReview = await fetchTMDB_API(`movie/${id}/reviews`)
     const review = rawReview.results.slice(0,6);
-    
+
+    const avatarPath = rawReview.author_details?.avatar_path;
+    const avatarUrl = avatarPath 
+                    ? avatarPath.startsWith('http') 
+                    ? avatarPath.replace(/^\//, '') 
+                    : `https://image.tmdb.org/t/p/w185${avatarPath}`
+                    : 'https://via.placeholder.com/150';
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center text-white">
@@ -149,33 +155,27 @@ const Page = async ({ params }) => {
                                 </div>
                             </div>
                         ))}
-                        <button className="p-4 w-full font-bold flex flex-row justify-center cursor-">
+
+                        <a href={`actor/details/${id}`} className="my-6 w-full font-bold flex flex-row cursor-pointer">
                             <p>Show other actor details</p>
                             <MoreVertical size={20}/>
-                        </button>
-                        {review?.map((item) => {
-                            // 1. Extract avatar_path safely from author_details
-                            const avatarPath = item.author_details?.avatar_path;
-                            
-                            // 2. Build full URL or fall back if null
-                            const avatarUrl = avatarPath 
-                                ? avatarPath.startsWith('http') 
-                                    ? avatarPath.replace(/^\//, '') // Handles full URLs (e.g., Gravatar links)
-                                    : `https://image.tmdb.org/t/p/w185${avatarPath}`
-                                : 'https://via.placeholder.com/150'; // Default fallback avatar image
-
-                            return (
-                                <div key={item.id}>
-                                    <img 
-                                        src={avatarUrl} 
-                                        alt={item.author} 
-                                        style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
-                                    />
-                                    <h1>{item.author}</h1>
-                                    <p>{item.content}</p>
-                                </div>
-                            );
-                        })}
+                        </a>
+                    </div>
+                    <div className="w-4/5">
+                            <h1 className="text-2xl font-bold mb-4">Reviews</h1>
+                            <div className="grid grid-cols-2 gap-5">
+                                {review?.map((item) => (
+                                    <div key={item.id} className="relative h-fit w-fit rounded-xl border border-amber-300 p-2">
+                                        <img 
+                                            src={avatarUrl} 
+                                            alt={item.author} 
+                                            style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
+                                        />
+                                        <h1>{item.author}</h1>
+                                        <p className="line-clamp-3">{item.content}</p>
+                                    </div>
+                                ))}
+                            </div>
                     </div>
                 </div>
             </div>
