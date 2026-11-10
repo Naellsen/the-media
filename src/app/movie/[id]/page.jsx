@@ -11,7 +11,6 @@ const Page = async ({ params }) => {
     const movie = await fetchTMDB_API(`movie/${id}`, {
         append_to_response: "videos,credits",
     }).catch(() => null);
-    console.log(movie)
 
     if (!movie || movie.status_code === 34) {
         return (
@@ -54,12 +53,18 @@ const Page = async ({ params }) => {
     const rawReview = await fetchTMDB_API(`movie/${id}/reviews`)
     const review = rawReview.results.slice(0,6);
 
-    const avatarPath = rawReview.author_details?.avatar_path;
-    const avatarUrl = avatarPath 
-                    ? avatarPath.startsWith('http') 
-                    ? avatarPath.replace(/^\//, '') 
-                    : `https://image.tmdb.org/t/p/w185${avatarPath}`
-                    : 'https://via.placeholder.com/150';
+    const getAvatarUrl = (avatarPath) => {
+        // Hosted default user avatar icon URL
+        if (!avatarPath) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+        
+        if (avatarPath.startsWith('http')) {
+            return avatarPath.replace(/^\//, '');
+        }
+        const cleanedPath = avatarPath.startsWith('/') ? avatarPath : `/${avatarPath}`;
+        return `https://image.tmdb.org/t/p/w185${cleanedPath}`;
+    };
+
+const avatarUrl = getAvatarUrl(review.author_details?.avatar_path);
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center text-white">
@@ -130,7 +135,7 @@ const Page = async ({ params }) => {
             </div>
 
             <div className=" flex w-4/5 mt-4">
-                <div className="w-full">
+                <div className="w-3/5">
                     <h1 className="text-2xl font-bold">Top Cast</h1>
                     <div className="grid grid-cols-2">
                         {cast.map ((actor) => (
@@ -156,7 +161,7 @@ const Page = async ({ params }) => {
                             </div>
                         ))}
 
-                        <a href={`actor/details/${id}`} className="my-6 w-full font-bold flex flex-row cursor-pointer">
+                        <a href={`actor/details/${id}`} className="my-6 font-bold flex flex-row cursor-pointer bg-white">
                             <p>Show other actor details</p>
                             <MoreVertical size={20}/>
                         </a>
@@ -164,10 +169,10 @@ const Page = async ({ params }) => {
                     <div className="w-4/5">
                             <h1 className="text-2xl font-bold mb-4">Reviews</h1>
                             <div className="grid grid-cols-2 gap-5">
-                                {review?.map((item) => (
+                                {review.map((item) => (
                                     <div key={item.id} className="relative h-fit w-fit rounded-xl border border-amber-300 p-2">
                                         <img 
-                                            src={avatarUrl} 
+                                            src={getAvatarUrl(item.author_details?.avatar_path)} 
                                             alt={item.author} 
                                             style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
                                         />
