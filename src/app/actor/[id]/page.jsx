@@ -1,5 +1,6 @@
 import { fetchTMDB_API } from "@/utils/api";
 import Image from "next/image";
+import Link from "next/link";
 
 const Page = async ({ params }) => {
     const { id } = await params;
@@ -36,14 +37,16 @@ const Page = async ({ params }) => {
                         <div className="grid grid-cols-3 overflow-hidden">
                             {cast.map((item) => (
                                 <div key={item.id} className="text-neutral-300 grid-cols-3">
-                                    <div className="relative w-40 h-40">
-                                        <Image
-                                            src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                                            alt={item.title || item.name || "Movie poster"}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
+                                    <Link href={`/movie/${item.id}`}>
+                                        <div className="relative w-40 h-60 rounded-xl">
+                                            <Image
+                                                src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                                                alt={item.title || item.name || "Movie poster"}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                    </Link>
                                     <span className="font-medium">
                                         {item.title || item.name}
                                     </span>
