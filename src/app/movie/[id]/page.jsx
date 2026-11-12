@@ -142,7 +142,9 @@ const Page = async ({ params }) => {
                                     </Link>
                                 </div>
                                 <div className="flex flex-col w-fit p-2 font-bold">
-                                    <p className="text-md">{actor.name}</p>
+                                    <Link href={`/actor/${actor.id}`}>
+                                        <p className="text-md">{actor.name}</p>
+                                    </Link>
                                     <p className="text-xs">{actor.character}</p>
                                 </div>
                             </div>

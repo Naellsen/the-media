@@ -36,7 +36,7 @@ const Page = async ({ params }) => {
                     {cast.length > 0 ? (
                         <div className="grid grid-cols-3 overflow-hidden">
                             {cast.map((item) => (
-                                <div key={item.id} className="text-neutral-300 grid-cols-3">
+                                <div key={item.id } className="text-neutral-300 grid-cols-3">
                                     <Link href={`/movie/${item.id}`}>
                                         <div className="relative w-40 h-60 rounded-xl">
                                             <Image

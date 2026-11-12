@@ -35,7 +35,7 @@ const Page = async ({params}) => {
                 <h1 className="text-2xl font-bold mt-4">Cast</h1>
                 <div className="grid grid-cols-3">
                     {cast.map ((actor) => (
-                            <div key={actor.id} className="rounded-lg overflow-clip mt-5 flex flex-row items-center">
+                            <div className="rounded-lg overflow-clip mt-5 flex flex-row items-center">
                                 <div className="relative w-20 aspect-square rounded-full overflow-hidden">
                                     <Link href={`/actor/${actor.id}`}>
                                         <Image 
