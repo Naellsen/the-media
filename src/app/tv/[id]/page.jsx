@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchTMDB_API } from "@/utils/api";
 import VideoPlayer from "@/utils/VideoPlayer";
-import { MoreVertical, Star } from "lucide-react";
+import { MoreVertical, Star, Tv } from "lucide-react";
 
 
 const Page = async ({ params }) => {
@@ -46,6 +46,9 @@ const Page = async ({ params }) => {
 
     const response = await fetchTMDB_API(`tv/${id}/credits`);
     const cast = response?.cast?.slice(0, 6) || [];
+
+    const rawReview = await fetchTMDB_API(`tv/${id}/reviews`)
+    const review = rawReview.results.slice(0,6);
     
     return (
         <div className="min-h-screen flex flex-col items-center justify-center text-white">
@@ -65,7 +68,7 @@ const Page = async ({ params }) => {
                     <h1 className="text-2xl">{title}</h1>
                     <div className="flex flex-row gap-2 text-xs text-gray-500">
                         <p>{releaseYear}</p>
-                        <p>{runtimeMins}m</p>
+                        <p>{runtimeMins}M</p>
                     </div>
                 </div>
                 <div className="relative flex flex-row font-bold gap-4">
@@ -95,7 +98,7 @@ const Page = async ({ params }) => {
                         />
                     </div>
                 ) : (
-                    <p className="text-gray-400 items-center">No trailer available for this Tv Series.</p>
+                    <p className="text-gray-400 items-center sp">No trailer available for this Tv Series.</p>
                 )}
             </div>
             
@@ -127,7 +130,7 @@ const Page = async ({ params }) => {
                                             src={
                                                 actor.profile_path
                                                 ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-                                                : "/placeholder.png"
+                                                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                                             }
                                             alt={actor.name}
                                             fill
@@ -136,19 +139,39 @@ const Page = async ({ params }) => {
                                     </Link>
                                 </div>
                                 <div className="flex flex-col w-fit p-2 font-bold">
-                                    <p className="text-md">{actor.name}</p>
+                                    <Link href={`/actor/${actor.id}`}>
+                                        <p className="text-md">{actor.name}</p>
+                                    </Link>
                                     <p className="text-xs">{actor.character}</p>
                                 </div>
                             </div>
                         ))}
-                        <button className="p-4 w-full font-bold flex flex-row justify-center cursor-">
+
+                        <a href={`actor/details/${id}`} className="my-6 font-bold flex flex-row cursor-pointer">
                             <p>Show other actor details</p>
                             <MoreVertical size={20}/>
-                        </button>
+                        </a>
                     </div>
-                </div>
-                <div className="w-2/5">
-                    <h1>Ranks</h1>
+                    <div className="w-4/5">
+                            <h1 className="text-2xl font-bold mb-4">Reviews</h1>
+                            <div className="grid grid-cols-2 gap-5">
+                                {review.map((user) => (
+                                    <div key={user.id} className="relative h-fit w-fit rounded-xl border border-amber-300 p-2">
+                                        <img 
+                                            src={
+                                                user.profile_path
+                                                ? `https://image.tmdb.org/t/p/w185${user.profile_path}`
+                                                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                            } 
+                                            alt={user.author} 
+                                            style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
+                                        />
+                                        <h1>{user.author}</h1>
+                                        <p className="line-clamp-3">{user.content}</p>
+                                    </div>
+                                ))}
+                            </div>
+                    </div>
                 </div>
             </div>
             
