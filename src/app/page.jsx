@@ -2,6 +2,7 @@ import { fetchAniList, fetchComicVine, fetchTMDB_API } from "@/utils/api";
 import { TOP_MEDIA_QUERY } from "@/query/query";
 import { formatAniListItem, formatTMDBItem, formatComicVineList } from "@/utils/formaters";
 import MediaCard from "@/components/MediaCard";
+import Image from "next/image";
 
 const Page = async () => {
     const popularData = await fetchAniList(TOP_MEDIA_QUERY, {
@@ -11,7 +12,7 @@ const Page = async () => {
     const topAnime = (popularData?.anime?.media || []).map(formatAniListItem);
     const topManga = (popularData?.manga?.media || []).map(formatAniListItem);
 
-    const movieData = await fetchTMDB_API("movie/popular", "limit=1");
+    const movieData = await fetchTMDB_API("movie/popular");
     const popularMovies = movieData?.results ? movieData.results.slice(0, 1).map(formatTMDBItem).filter(Boolean) : [];
 
     const tvData = await fetchTMDB_API("tv/popular");
@@ -28,8 +29,8 @@ const Page = async () => {
         <div className="min-h-screen flex justify-center w-full">
             <div className="w-3/5">
                 <div className="flex justify-between">
-                    <h1 className="text-white">Test</h1>
-                    <h1 className="text-white">Test</h1>                
+                    <h1 className="text-white font-bold text-xl">Popular On The Media</h1>
+                    <a className="text-gray-400" href="/popular">Test</a>                
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                         {popularMovies.map((movie) => (
@@ -47,6 +48,12 @@ const Page = async () => {
                         {popularComics.map((comics) => (
                             <MediaCard key={comics.id} item={comics} />
                         ))}
+                </div>
+                <div>
+                    <h1 className="text-white">Recomendation for you</h1>
+                    <div>
+                        {}
+                    </div>
                 </div>
             </div>
         </div>
