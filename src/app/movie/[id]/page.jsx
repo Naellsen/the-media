@@ -159,17 +159,22 @@ const Page = async ({ params }) => {
                             <h1 className="text-2xl font-bold mb-4">Reviews</h1>
                             <div className="grid grid-cols-2 gap-5">
                                 {review.map((user) => (
-                                    <div key={user.id} className="relative h-fit w-fit rounded-xl border border-amber-300 p-2">
-                                        <img 
-                                            src={
-                                                user.profile_path
-                                                ? `https://image.tmdb.org/t/p/w185${user.profile_path}`
-                                                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                                            } 
-                                            alt={user.author} 
-                                            style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
-                                        />
-                                        <h1>{user.author}</h1>
+                                    <div key={user.id} className="relative w-full h-fit
+                                     rounded-xl border border-amber-300 p-2">
+                                        <div className="flex flex-row gap-4">
+                                            <div className="relative w-10 aspect-square rounded-full overflow-hidden">
+                                            <Image 
+                                                src={
+                                                    user.profile_path
+                                                    ? `https://image.tmdb.org/t/p/w185${user.profile_path}`
+                                                    : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                                } 
+                                                alt={user.author} 
+                                                fill
+                                            />
+                                        </div>
+                                        <h1 className="text-xl font-bold">{user.author}</h1>
+                                        </div>
                                         <p className="line-clamp-3">{user.content}</p>
                                     </div>
                                 ))}

@@ -14,16 +14,24 @@ const Page = async () => {
 
     const movieData = await fetchTMDB_API("movie/popular");
     const popularMovies = movieData?.results ? movieData.results.slice(0, 1).map(formatTMDBItem).filter(Boolean) : [];
+    const recomendationMovies = movieData?.results ? movieData.results.slice(0,5).map(formatTMDBItem).filter(Boolean): [];
 
     const tvData = await fetchTMDB_API("tv/popular");
-    const popularTV = tvData?.results ? tvData.results.slice(0, 1).map(formatTMDBItem).filter(Boolean) : [];
+    const popularTv = tvData?.results ? tvData.results.slice(0, 1).map(formatTMDBItem).filter(Boolean) : [];
+     const recomendationTv = tvData?.results ? tvData.results.slice(0, 5).map(formatTMDBItem).filter(Boolean) : [];
 
     const raw = await fetchComicVine("volumes", {
         sort: "date_last_updated:desc",
         limit: 1,
         field_list: "id,name,publisher,start_year,count_of_issues,image,deck",
     });
+    const recomendation = await fetchComicVine("volumes", {
+        sort: "date_last_updated:desc",
+        limit: 5,
+        field_list: "id,name,publisher,start_year,count_of_issues,image,deck",
+    });
     const popularComics = formatComicVineList(raw, "volume");
+    const recomendationComics = formatComicVineList(recomendation, "volume")
 
     return (
         <div className="min-h-screen flex justify-center w-full">
@@ -36,7 +44,7 @@ const Page = async () => {
                         {popularMovies.map((movie) => (
                             <MediaCard key={movie.id} item={movie} />
                         ))}
-                        {popularTV.map((tv) => (
+                        {popularTv.map((tv) => (
                             <MediaCard key={tv.id} item={tv} />
                         ))}
                         {topAnime.map((anime) => (
@@ -51,8 +59,16 @@ const Page = async () => {
                 </div>
                 <div>
                     <h1 className="text-white">Recomendation for you</h1>
-                    <div>
-                        {}
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                        {recomendationMovies.map((movies) => (
+                            <MediaCard key={movies.id} item={movies}/>
+                        ))}
+                        {recomendationTv.map((tv) => (
+                            <MediaCard key={tv.id} item={tv}/>
+                        ))}
+                        {recomendationComics.map((comics) => (
+                            <MediaCard key={comics.id} item={comics}/>
+                        ))}
                     </div>
                 </div>
             </div>
