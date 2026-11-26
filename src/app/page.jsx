@@ -12,13 +12,20 @@ const Page = async () => {
     const topAnime = (popularData?.anime?.media || []).map(formatAniListItem);
     const topManga = (popularData?.manga?.media || []).map(formatAniListItem);
 
+    const popularJapan = await fetchAniList(TOP_MEDIA_QUERY, {
+        perPage: 5,
+        sort: ["TRENDING_DESC"]
+    });
+    const popularAnime = (popularJapan?.anime?.media || []).map(formatAniListItem);
+    const popularManga = (popularJapan?.manga?.media || []).map(formatAniListItem);
+
     const movieData = await fetchTMDB_API("movie/popular");
     const popularMovies = movieData?.results ? movieData.results.slice(0, 1).map(formatTMDBItem).filter(Boolean) : [];
     const recomendationMovies = movieData?.results ? movieData.results.slice(0,5).map(formatTMDBItem).filter(Boolean): [];
 
     const tvData = await fetchTMDB_API("tv/popular");
     const popularTv = tvData?.results ? tvData.results.slice(0, 1).map(formatTMDBItem).filter(Boolean) : [];
-     const recomendationTv = tvData?.results ? tvData.results.slice(0, 5).map(formatTMDBItem).filter(Boolean) : [];
+    const recomendationTv = tvData?.results ? tvData.results.slice(0, 5).map(formatTMDBItem).filter(Boolean) : [];
 
     const raw = await fetchComicVine("volumes", {
         sort: "date_last_updated:desc",
@@ -58,13 +65,19 @@ const Page = async () => {
                         ))}
                 </div>
                 <div>
-                    <h1 className="text-white">Recomendation for you</h1>
+                    <h1 className="text-white text-2xl font-bold justify-center">Recomendation for you</h1>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                         {recomendationMovies.map((movies) => (
                             <MediaCard key={movies.id} item={movies}/>
                         ))}
                         {recomendationTv.map((tv) => (
                             <MediaCard key={tv.id} item={tv}/>
+                        ))}
+                        {popularAnime.map((anime) => (
+                            <MediaCard key={anime.id} item={anime}/>
+                        ))}
+                        {popularManga.map((manga) => (
+                            <MediaCard key={manga.id} item={manga}/>
                         ))}
                         {recomendationComics.map((comics) => (
                             <MediaCard key={comics.id} item={comics}/>

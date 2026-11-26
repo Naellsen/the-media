@@ -1,29 +1,13 @@
-model User {
-  id      String  @id @default(cuid())
-  email   String  @unique
-  name    String?
-  entries Entry[]
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
-model Entry {
-  id         String    @id @default(cuid())
-  userId     String
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  source     Source    // where the item comes from
-  externalId String    // the ID in TMDB / AniList / Comic Vine
-  mediaType  MediaType
-
-  status     Status    @default(PLAN_TO_WATCH)
-  rating     Int?      // 1-10, null if not rated yet
-  review     String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-
-  @@unique([userId, source, externalId]) // one entry per user per item
-  @@index([userId, status])
+datasource db {
+  provider = "postgresql"
 }
-
-enum Source    { TMDB ANILIST COMICVINE }
-enum MediaType { MOVIE TV ANIME MANGA COMIC }
-enum Status    { PLAN_TO_WATCH IN_PROGRESS COMPLETED DROPPED }
